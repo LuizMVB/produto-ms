@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -36,14 +37,14 @@ public class Oferta extends Entidade<Oferta> {
     private LocalDateTime dataFim;
 
     @Embedded
-    protected DataEmbeddable dataEmbeddable;
-
-    @Column(nullable = false, updatable = false)
-    private Long idFilial;
+    private DataEmbeddable data = new DataEmbeddable();
 
     @ManyToOne
-    @JoinColumn(name = "id_produto")
+    @JoinColumn(name = "id_produto", updatable = false)
     private Produto produto;
+
+    @OneToMany(mappedBy = "oferta", cascade = CascadeType.ALL)
+    private List<Distribuicao> distribuicaoList;
 
     public void desativar() {
         isAtivo = false;

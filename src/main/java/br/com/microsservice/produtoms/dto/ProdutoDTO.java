@@ -1,6 +1,6 @@
-package br.com.microsservice.produtoms.controller.dto;
+package br.com.microsservice.produtoms.dto;
 
-import jakarta.validation.constraints.NotEmpty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,12 +11,13 @@ import java.math.BigDecimal;
 @Setter
 public class ProdutoDTO {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @NotNull
     private String nome;
 
-    private String descricao = null;
+    private String descricao;
 
     private Boolean isAtivo = true;
 

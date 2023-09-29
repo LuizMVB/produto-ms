@@ -1,6 +1,7 @@
 package br.com.microsservice.produtoms.controller;
 
-import br.com.microsservice.produtoms.controller.dto.ProdutoDTO;
+import br.com.microsservice.produtoms.domain.TipoFilialEnum;
+import br.com.microsservice.produtoms.dto.ProdutoDTO;
 import br.com.microsservice.produtoms.service.CadastroProdutoService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -24,8 +25,12 @@ public class ProdutoController {
     }
 
     @GetMapping(value = "/produto")
-    public Page<ProdutoDTO> listar(@PageableDefault(size = 15) Pageable paginacao) {
-        return cadastroProdutoService.listar(paginacao);
+    public Page<ProdutoDTO> listar(
+            @RequestParam(required = false) String cidade,
+            @RequestParam(required = false) String uf,
+            @RequestParam(required = false) TipoFilialEnum tipoFilial,
+            @PageableDefault(size = 15) Pageable paginacao) {
+        return cadastroProdutoService.listar(cidade, uf, tipoFilial, paginacao);
     }
 
     @GetMapping(value = "/produto/{id}")

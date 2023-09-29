@@ -8,7 +8,6 @@ CREATE TABLE oferta (
     data_fim DATETIME DEFAULT NULL,
     data_inclusao DATETIME NOT NULL,
     data_atualizacao DATETIME DEFAULT NULL,
-    id_filial BIGINT(20) NOT NULL COMMENT "Identificador da filial vindo do fluxo de mantimento de mercado e filial",
     PRIMARY KEY (id),
     FOREIGN KEY (id_produto) REFERENCES produto(id)
 );
