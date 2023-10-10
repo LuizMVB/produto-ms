@@ -1,12 +1,10 @@
 package br.com.microsservice.produtoms.domain.entity;
 
-import br.com.microsservice.produtoms.domain.Entidade;
+import br.com.microsservice.produtoms.domain.event.OnChangeIsAtivoProdutoEvent;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Setter;
-import org.springframework.util.CollectionUtils;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,7 +13,7 @@ import java.util.List;
 @Entity
 @Table
 @Data
-public class Produto extends Entidade<Produto> {
+public class Produto extends AbstractAggregateRoot<Produto> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +26,7 @@ public class Produto extends Entidade<Produto> {
     private String descricao;
 
     @Column
-    private Boolean isAtivo;
+    private Boolean isAtivo = true;
 
     @Column(precision = 8, scale = 2)
     private BigDecimal valorSugerido;
@@ -39,18 +37,12 @@ public class Produto extends Entidade<Produto> {
     @OneToMany(mappedBy = "produto")
     private List<Oferta> ofertaList;
 
-    @PrePersist
-    @PreUpdate
-    public void onPrePersist() {
-        if(isAtivo) {
-            return;
-        }
+    @Transient
+    private Boolean lastIsAtivo;
 
-        if(CollectionUtils.isEmpty(ofertaList)) {
-            return;
-        }
-
-        ofertaList.forEach(Oferta::desativar);
+    public void setAtivo(Boolean ativo) {
+        lastIsAtivo = isAtivo;
+        isAtivo = ativo;
+        registerEvent(new OnChangeIsAtivoProdutoEvent(id, isAtivo, lastIsAtivo));
     }
-
 }

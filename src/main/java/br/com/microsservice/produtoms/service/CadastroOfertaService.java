@@ -62,7 +62,7 @@ public class CadastroOfertaService {
                 .findById(id)
                 .orElseThrow(EntityNotFoundException::new);
         Oferta ofertaToBe = modelMapper.map(ofertaDTO, Oferta.class);
-        oferta.mergeNonNullProperties(ofertaToBe);
+        modelMapper.map(ofertaToBe, oferta);
         ofertaRepository.save(oferta);
     }
 

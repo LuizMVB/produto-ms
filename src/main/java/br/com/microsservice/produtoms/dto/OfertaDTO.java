@@ -24,7 +24,7 @@ public class OfertaDTO {
     @NotEmpty
     private String descricao;
 
-    private Boolean isAtivo = true;
+    private Boolean isAtivo;
 
     @NotNull
     private BigDecimal valor;
@@ -32,6 +32,4 @@ public class OfertaDTO {
     @NotNull
     private LocalDateTime dataFim;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private ProdutoDTO produto;
 }

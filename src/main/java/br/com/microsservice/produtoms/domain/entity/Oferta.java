@@ -1,11 +1,10 @@
 package br.com.microsservice.produtoms.domain.entity;
 
-import br.com.microsservice.produtoms.domain.Entidade;
+import br.com.microsservice.produtoms.domain.event.VerificacaoProdutoIsAtivoOfertaEvent;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Setter;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,7 +14,7 @@ import java.util.List;
 @Entity
 @Table
 @Data
-public class Oferta extends Entidade<Oferta> {
+public class Oferta extends AbstractAggregateRoot<Oferta> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,12 +38,16 @@ public class Oferta extends Entidade<Oferta> {
     @Embedded
     private DataEmbeddable data = new DataEmbeddable();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_produto", updatable = false)
     private Produto produto;
 
     @OneToMany(mappedBy = "oferta", cascade = CascadeType.ALL)
     private List<Distribuicao> distribuicaoList;
+
+    public Oferta() {
+        registerEvent(new VerificacaoProdutoIsAtivoOfertaEvent(id));
+    }
 
     public void desativar() {
         isAtivo = false;
