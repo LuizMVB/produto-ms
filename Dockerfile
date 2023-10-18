@@ -8,7 +8,7 @@ ENV PROFILE=${PROFILE}
 ENV ADDITIONAL_OPTS=${ADDITIONAL_OPTS}
 
 # Copy your application jar and set the working directory
-WORKDIR /opt/olatcg-backend
+WORKDIR /opt/app
 COPY /target/*.jar app.jar
 
 # Use bash as the shell
